@@ -29,6 +29,15 @@ public class NetworkConnection : MonoBehaviour {
     public float joystick2X;
     public float joystick2Y;
 
+
+    public bool jump = false;
+    public bool kick = false;
+    public bool punch = false;
+    bool crouch;
+
+    Vector3 scale;
+    Vector3 halfScale;
+
     void Start() {
         /*try { 
             client = new TcpClient(host, port);
@@ -39,7 +48,11 @@ public class NetworkConnection : MonoBehaviour {
         InvokeRepeating("pinger", 0f, 5f);*/
         ThreadStart ts = new ThreadStart(Client);
         mThread = new Thread(ts);
-        mThread.Start(); 
+        mThread.Start();
+
+
+        scale = transform.localScale;
+        halfScale = 0.5f * scale;
     }
 
     void Client() {
@@ -71,7 +84,36 @@ public class NetworkConnection : MonoBehaviour {
     void Update() {
         //transform.position = Vector3.Lerp(pos, transform.position, Time.deltaTime * speed);
 
+
+        if (aButton == 0)
+            jump = true;
+        else
+            jump = false;
+
+        if (bButton == 0)
+            crouch = true;
+        else
+            crouch = false;
+
+        if (xButton == 0)
+            punch = true;
+        else
+            punch = false;
+
+        if (yButton == 0)
+            kick = true;
+        else
+            kick = false;
+
+
         transform.position = new Vector3(transform.position.x + joystick1X, transform.position.y + joystick1Y, transform.position.z);
+
+        if (crouch)
+            transform.localScale = Vector3.Lerp(halfScale, scale, Time.deltaTime * speed);
+        else
+            transform.localScale = Vector3.Lerp(scale, halfScale, Time.deltaTime * speed);
+
+        
 
     }
 
