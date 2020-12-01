@@ -17,6 +17,18 @@ public class NetworkConnection : MonoBehaviour {
     public float speed = 1;
     public float divBy = 1;
 
+
+    public float aButton;
+    public float bButton;
+    public float xButton;
+    public float yButton;
+
+    public float joystick1X;
+    public float joystick1Y;
+
+    public float joystick2X;
+    public float joystick2Y;
+
     void Start() {
         /*try { 
             client = new TcpClient(host, port);
@@ -44,8 +56,10 @@ public class NetworkConnection : MonoBehaviour {
                 string dataReceived = Encoding.UTF8.GetString(buffer, 0, bytesRead);
                 Debug.Log(dataReceived);
                 //Debug.Log(dataReceived);
-                pos = StringToVector3(dataReceived);
-                Debug.Log(pos);
+                //pos = StringToVector3(dataReceived);
+                // Debug.Log(pos);
+                ParseInput(dataReceived);
+
             }
             s.Close();
         } 
@@ -55,7 +69,10 @@ public class NetworkConnection : MonoBehaviour {
     }
 
     void Update() {
-        transform.position = Vector3.Lerp(pos, transform.position, Time.deltaTime * speed);
+        //transform.position = Vector3.Lerp(pos, transform.position, Time.deltaTime * speed);
+
+        transform.position = new Vector3(transform.position.x + joystick1X, transform.position.y + joystick1Y, transform.position.z);
+
     }
 
     public Vector3 StringToVector3(string sVector) {
@@ -75,6 +92,35 @@ public class NetworkConnection : MonoBehaviour {
 
         return result;
     }
+
+
+    public void ParseInput(string sInput)
+    {
+        // Remove the parentheses
+        //if (sVector.StartsWith("(") && sVector.EndsWith(")"))
+        //{
+        //    sVector = sVector.Substring(1, sVector.Length - 2);
+        //}
+
+        // split the items
+        string[] sArray = sInput.Split(',');
+
+        // store as a Vector3
+
+        aButton = float.Parse(sArray[0]);
+        bButton = float.Parse(sArray[1]);
+        xButton = float.Parse(sArray[2]);
+        yButton = float.Parse(sArray[3]);
+
+        joystick1X = float.Parse(sArray[4]);
+        joystick1Y = float.Parse(sArray[5]);
+
+        joystick2X = float.Parse(sArray[6]);
+        joystick2Y = float.Parse(sArray[7]);
+
+
+    }
+
 
     void pinger() {
         if (!IsConnected(client)) { 
