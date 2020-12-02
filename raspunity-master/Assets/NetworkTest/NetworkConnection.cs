@@ -52,7 +52,7 @@ public class NetworkConnection : MonoBehaviour {
 
 
         scale = transform.localScale;
-        halfScale = 0.5f * scale;
+        halfScale = new Vector3(scale.x,0.5f * scale.y, scale.z);
     }
 
     void Client() {
@@ -108,10 +108,10 @@ public class NetworkConnection : MonoBehaviour {
 
         transform.position = new Vector3(transform.position.x + joystick1X, transform.position.y + joystick1Y, transform.position.z);
 
-        if (crouch)
-            transform.localScale = Vector3.Lerp(halfScale, scale, Time.deltaTime * speed);
-        else
-            transform.localScale = Vector3.Lerp(scale, halfScale, Time.deltaTime * speed);
+       // if (crouch)
+           // transform.localScale = Vector3.Lerp(halfScale, scale, Time.deltaTime * speed);
+        //else
+           // transform.localScale = Vector3.Lerp(scale, halfScale, Time.deltaTime * speed);
 
         
 
